@@ -55,7 +55,28 @@ const createPost = async (req, res, next) => {
   }
 };
 
+const getDataById = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const post = await Post.findOne({
+      where: { id: id },
+    });
+
+    res.status(200).json({
+      status: "Success",
+      requestAt: req.requestTime,
+      data: { post },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "Failed",
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   getAllPost,
   createPost,
+  getDataById,
 };

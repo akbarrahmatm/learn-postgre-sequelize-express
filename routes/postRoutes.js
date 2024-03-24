@@ -9,4 +9,6 @@ router
   .get(postController.getAllPost)
   .post(postController.createPost);
 
+router.route("/:id").get(postController.getDataById);
+
 module.exports = router;
