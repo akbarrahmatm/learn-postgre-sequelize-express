@@ -75,8 +75,48 @@ const getDataById = async (req, res, next) => {
   }
 };
 
+const updateData = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const data = req.body;
+
+    const post = await Post.findOne({
+      where: { id: id },
+    });
+
+    if (!post) {
+      return res.status(400).json({
+        status: "Failed",
+        message: `Data with id (${id}) not exist`,
+      });
+    }
+
+    const query = {
+      where: { id: id },
+    };
+
+    await Post.update(data, query)
+      .then(() => {
+        res.status(200).json({
+          status: "Success",
+          message: "Data successfully updated",
+        });
+      })
+      .catch((err) => {
+        throw new Error(err.message);
+      });
+  } catch (err) {
+    res.status(400).json({
+      status: "Failed",
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   getAllPost,
   createPost,
   getDataById,
+  updateData,
 };
