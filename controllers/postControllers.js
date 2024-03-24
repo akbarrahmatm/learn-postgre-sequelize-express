@@ -114,9 +114,34 @@ const updateData = async (req, res, next) => {
   }
 };
 
+const deleteData = async (req, res, next) => {
+  const id = req.params.id;
+  const post = await Post.findOne({ where: { id: id } });
+  if (!post) {
+    return res.status(400).json({
+      status: "Failed",
+      message: `Data with ID (${id}) is not exist`,
+    });
+  }
+
+  await Post.destroy({
+    where: { id: id },
+  })
+    .then(() => {
+      res.status(204).json({
+        status: "Success",
+        message: "Data successfully deleted",
+      });
+    })
+    .catch((err) => {
+      throw new Error(err.message);
+    });
+};
+
 module.exports = {
   getAllPost,
   createPost,
   getDataById,
   updateData,
+  deleteData,
 };
